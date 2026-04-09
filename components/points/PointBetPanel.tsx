@@ -1,51 +1,101 @@
+"use client";
 
-'use client';
 import { useState } from "react";
-import { getCurrentUser } from "@/lib/auth/session";
 
-export default function PointBetPanel({ gamePk, gameDate, homeTeam, awayTeam }) {
-  const [pickSide, setPickSide] = useState("홈");
-  const [points, setPoints] = useState("100");
+type PointBetPanelProps = {
+  gamePk: number;
+  gameDate: string;
+  homeTeam: string;
+  awayTeam: string;
+};
 
-  async function submitBet(e) {
-    e.preventDefault();
+export default function PointBetPanel({
+  gamePk,
+  gameDate,
+  homeTeam,
+  awayTeam,
+}: PointBetPanelProps) {
+  const [pickSide, setPickSide] = useState<string>("홈");
+  const [points, setPoints] = useState<string>("100");
 
-    const user = await getCurrentUser();
-    if (!user) {
-      alert("로그인 필요");
-      return;
+  async function handleSubmit() {
+    try {
+      const response = await fetch("/api/points/bet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          gamePk,
+          gameDate,
+          homeTeam,
+          awayTeam,
+          pickSide,
+          points: Number(points || 0),
+        }),
+      });
+
+      const json = await response.json().catch(() => ({ ok: false }));
+      if (!response.ok || !json?.ok) {
+        alert(json?.error || "포인트 배팅 저장 실패");
+        return;
+      }
+
+      alert("포인트 배팅이 저장됐다.");
+    } catch {
+      alert("포인트 배팅 처리 중 오류가 발생했다.");
     }
-
-    await fetch("/api/points/bet", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.id,
-        gamePk,
-        gameDate,
-        homeTeam,
-        awayTeam,
-        betType: "moneyline",
-        pickSide,
-        points: Number(points),
-      }),
-    });
-
-    alert("배팅 완료");
   }
 
   return (
-    <form onSubmit={submitBet}>
-      <h3>포인트 배팅</h3>
+    <div className="card">
+      <div className="section-header">
+        <h2 className="text-2xl font-bold">포인트 배팅</h2>
+        <span className="badge">시뮬레이션</span>
+      </div>
 
-      <select onChange={(e) => setPickSide(e.target.value)}>
-        <option value="홈">홈</option>
-        <option value="원정">원정</option>
-      </select>
+      <div className="mt-4 grid-2">
+        <div className="card-soft">
+          <div className="text-sm opacity-70">선택</div>
+          <div className="mt-3 flex gap-2">
+            <button
+              className={pickSide === "홈" ? "button" : "button-secondary"}
+              onClick={() => setPickSide("홈")}
+              type="button"
+            >
+              홈
+            </button>
+            <button
+              className={pickSide === "원정" ? "button" : "button-secondary"}
+              onClick={() => setPickSide("원정")}
+              type="button"
+            >
+              원정
+            </button>
+          </div>
+        </div>
 
-      <input value={points} onChange={(e) => setPoints(e.target.value)} />
+        <div className="card-soft">
+          <div className="text-sm opacity-70">포인트</div>
+          <input
+            className="input mt-3"
+            value={points}
+            onChange={(e) => setPoints(e.target.value)}
+            inputMode="numeric"
+            placeholder="100"
+          />
+        </div>
+      </div>
 
-      <button type="submit">배팅하기</button>
-    </form>
+      <div className="mt-4 text-sm opacity-80">
+        경기: {awayTeam} vs {homeTeam} / 날짜: {gameDate} / 게임PK: {gamePk}
+      </div>
+
+      <div className="mt-4">
+        <button className="button" onClick={handleSubmit} type="button">
+          포인트 배팅 저장
+        </button>
+      </div>
+    </div>
   );
 }

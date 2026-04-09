@@ -287,3 +287,46 @@ export async function getAdminUser(userId: string) {
 
   return null;
 }
+export async function getAdminUsers() {
+  const supabase = createSupabaseServerClient();
+
+  const candidates = [
+    {
+      table: "profiles",
+      select: "id, email, username, nickname, role, created_at, point_balance",
+    },
+    {
+      table: "users",
+      select: "id, email, username, nickname, role, created_at, points",
+    },
+  ] as const;
+
+  for (const candidate of candidates) {
+    const { data, error } = await supabase
+      .from(candidate.table)
+      .select(candidate.select)
+      .limit(200);
+
+    if (!error && data) {
+      return (data as any[]).map((row) => ({
+        id: String(row.id ?? ""),
+        email: String(row.email ?? ""),
+        username: String(
+          row.username ??
+          row.nickname ??
+          (row.email ? String(row.email).split("@")[0] : "")
+        ),
+        nickname: String(row.nickname ?? ""),
+        role: String(row.role ?? "user"),
+        createdAt: String(row.created_at ?? ""),
+        points: Number(
+          row.points ??
+          row.point_balance ??
+          0
+        ),
+      }));
+    }
+  }
+
+  return [];
+}

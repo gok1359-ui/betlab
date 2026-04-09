@@ -1,0 +1,218 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply min-h-full;
+  }
+
+  body {
+    font-family: "Pretendard", system-ui, sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(96, 165, 250, 0.16), transparent 24%),
+      radial-gradient(circle at top right, rgba(34, 211, 238, 0.12), transparent 20%),
+      radial-gradient(circle at center top, rgba(129, 140, 248, 0.10), transparent 28%),
+      linear-gradient(180deg, #050c1b 0%, #071122 38%, #08152d 100%);
+    color: #f8fafc;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+@layer components {
+  .site-shell {
+    @apply min-h-screen;
+  }
+
+  .site-header {
+    @apply sticky top-0 z-40 border-b border-white/10;
+    backdrop-filter: blur(18px);
+    background:
+      linear-gradient(90deg, rgba(10, 20, 44, 0.92), rgba(16, 32, 67, 0.90), rgba(7, 18, 40, 0.92));
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
+  }
+
+  .site-header-inner {
+    @apply mx-auto flex max-w-[1280px] items-center justify-between gap-8 px-7 py-4;
+  }
+
+  .site-brand-wrap {
+    @apply inline-flex items-center;
+  }
+
+  .site-brand {
+    @apply flex items-center gap-4;
+  }
+
+  .site-brand-icon {
+    @apply inline-flex items-center justify-center rounded-[18px] border border-white/10;
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(180deg, rgba(96,165,250,0.14), rgba(129,140,248,0.08));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 14px 28px rgba(0,0,0,0.26);
+  }
+
+  .site-brand-icon-svg {
+    width: 44px;
+    height: 44px;
+  }
+
+  .site-brand-text {
+    @apply flex flex-col;
+    line-height: 1;
+  }
+
+  .site-brand-title {
+    font-size: 33px;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+    line-height: 1;
+    background: linear-gradient(90deg, #ffffff, #dbeafe 42%, #bfdbfe 74%, #a5f3fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 10px 24px rgba(96, 165, 250, 0.14);
+  }
+
+  .site-brand-subtitle {
+    margin-top: 3px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(191, 219, 254, 0.62);
+  }
+
+  .site-nav {
+    @apply flex items-center gap-2;
+  }
+
+  .site-nav-link {
+    @apply inline-flex items-center justify-center rounded-2xl px-5 py-3;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: rgba(248, 250, 252, 0.82);
+    transition: all 0.18s ease;
+  }
+
+  .site-nav-link:hover {
+    color: #ffffff;
+    background: linear-gradient(180deg, rgba(96,165,250,0.10), rgba(129,140,248,0.08));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .site-main {
+    @apply mx-auto max-w-[1280px] px-7 py-8;
+  }
+
+  .card {
+    @apply rounded-[24px] border border-white/10 p-6;
+    background: linear-gradient(180deg, rgba(15, 28, 62, 0.92), rgba(12, 23, 51, 0.96));
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+  }
+
+  .card-soft {
+    @apply rounded-[20px] border border-white/10 p-5;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+  }
+
+  .button {
+    @apply inline-flex items-center justify-center rounded-2xl px-4 py-3 font-extrabold text-white;
+    background: linear-gradient(135deg, #60a5fa, #818cf8);
+    box-shadow: 0 12px 26px rgba(79, 70, 229, 0.22);
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center rounded-2xl px-4 py-3 font-extrabold text-white;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .input {
+    @apply w-full rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-white outline-none;
+  }
+
+  .badge {
+    @apply inline-flex items-center justify-center rounded-full border px-3 py-1 text-xs font-extrabold;
+    border-color: rgba(125, 211, 252, 0.20);
+    background: rgba(56, 189, 248, 0.10);
+    color: #e0f2fe;
+  }
+
+  .section-header {
+    @apply flex items-center justify-between gap-3;
+  }
+
+  .grid-2 {
+    @apply grid grid-cols-2 gap-4;
+  }
+
+  .grid-3 {
+    @apply grid grid-cols-3 gap-4;
+  }
+
+  .hero-title {
+    font-size: 46px;
+    line-height: 1.08;
+    font-weight: 900;
+    letter-spacing: -0.05em;
+    color: #fff;
+  }
+
+  .hero-subtitle {
+    @apply mt-4 max-w-3xl text-base leading-8;
+    color: rgba(248,250,252,0.76);
+  }
+
+  .highlight-chip {
+    @apply inline-flex items-center rounded-full border px-3 py-1 text-sm font-bold;
+    border-color: rgba(129, 140, 248, 0.18);
+    background: rgba(129, 140, 248, 0.10);
+    color: #e9d5ff;
+  }
+}
+
+@layer utilities {
+  .betlab-muted {
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .betlab-divider {
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+}
+
+@media (max-width: 960px) {
+  .site-header-inner {
+    @apply flex-col items-start gap-4 px-4 py-4;
+  }
+
+  .site-nav {
+    @apply w-full justify-start flex-wrap;
+  }
+
+  .site-main {
+    @apply px-4 py-5;
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 34px;
+  }
+
+  .site-brand-title {
+    font-size: 28px;
+  }
+}

@@ -261,4 +261,46 @@ export async function getAdminUsers(): Promise<AdminUser[]> {
     role: String(row.role ?? "user"),
     createdAt: String(row.created_at ?? ""),
   }));
+}/**
+ * Add this export to lib/db/queries.ts
+ */
+export async function getAdminUser(userId: string) {
+  const supabase = createSupabaseServerClient();
+
+  const candidates = [
+    {
+      table: "profiles",
+      select: "id, email, nickname, role, created_at, point_balance",
+    },
+    {
+      table: "users",
+      select: "id, email, nickname, role, created_at, points",
+    },
+  ] as const;
+
+  for (const candidate of candidates) {
+    const { data, error } = await supabase
+      .from(candidate.table)
+      .select(candidate.select)
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (!error && data) {
+      return {
+        id: String((data as any).id ?? ""),
+        email: String((data as any).email ?? ""),
+        nickname: String((data as any).nickname ?? ""),
+        role: String((data as any).role ?? "user"),
+        createdAt: String((data as any).created_at ?? ""),
+        points: Number(
+          (data as any).points ??
+          (data as any).point_balance ??
+          0
+        ),
+      };
+    }
+  }
+
+  return null;
 }
+

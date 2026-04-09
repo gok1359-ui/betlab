@@ -243,38 +243,17 @@ export async function getPublicGame(gameId: string): Promise<PublicGame | null> 
   return null;
 }
 
-export async function getAdminUsers(): Promise<AdminUser[]> {
-  const supabase = createSupabaseServerClient();
-
-  const { data, error } = await supabase
-    .from("users")
-    .select("id, username, nickname, email, role, created_at")
-    .order("created_at", { ascending: false });
-
-  if (error || !data) return [];
-
-  return data.map((row: any) => ({
-    id: String(row.id),
-    username: String(row.username ?? ""),
-    nickname: String(row.nickname ?? ""),
-    email: String(row.email ?? ""),
-    role: String(row.role ?? "user"),
-    createdAt: String(row.created_at ?? ""),
-  }));
-}/**
- * Add this export to lib/db/queries.ts
- */
 export async function getAdminUser(userId: string) {
   const supabase = createSupabaseServerClient();
 
   const candidates = [
     {
       table: "profiles",
-      select: "id, email, nickname, role, created_at, point_balance",
+      select: "id, email, username, nickname, role, created_at, point_balance",
     },
     {
       table: "users",
-      select: "id, email, nickname, role, created_at, points",
+      select: "id, email, username, nickname, role, created_at, points",
     },
   ] as const;
 
@@ -289,6 +268,11 @@ export async function getAdminUser(userId: string) {
       return {
         id: String((data as any).id ?? ""),
         email: String((data as any).email ?? ""),
+        username: String(
+          (data as any).username ??
+          (data as any).nickname ??
+          ((data as any).email ? String((data as any).email).split("@")[0] : "")
+        ),
         nickname: String((data as any).nickname ?? ""),
         role: String((data as any).role ?? "user"),
         createdAt: String((data as any).created_at ?? ""),
@@ -303,4 +287,3 @@ export async function getAdminUser(userId: string) {
 
   return null;
 }
-
